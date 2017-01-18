@@ -46,16 +46,10 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23+'
+    compile 'com.android.support:appcompat-v7:22+'
     compile project(':sharelib')
 
     compile 'com.alibaba:fastjson:1.2.5'
 
-    compile files('libs/ShareSDK-QZone-2.8.0.jar')
-    compile files('libs/ShareSDK-SinaWeibo-2.8.0.jar')
-    //微信好友和朋友圈公用
-    compile files('libs/ShareSDK-Wechat-Core-2.8.0.jar')
-    compile files('libs/ShareSDK-Wechat-2.8.0.jar')
-    compile files('libs/ShareSDK-Wechat-Moments-2.8.0.jar')
-    compile files('libs/ShareSDK-ShortMessage-2.8.0.jar')
+
 }

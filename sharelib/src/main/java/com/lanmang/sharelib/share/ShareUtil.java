@@ -2,12 +2,15 @@ package com.lanmang.sharelib.share;
 
 import android.content.Context;
 
+import com.lanmang.sharelib.BuildConfig;
 import com.lanmang.sharelib.entry.ShareBean;
 import com.lanmang.sharelib.util.CommonUtil;
 import com.lanmang.sharelib.util.PlatformUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
@@ -22,18 +25,31 @@ import cn.sharesdk.onekeyshare.themes.classic.port.PlatformPageAdapterPort;
 
 public class ShareUtil {
 
-    private static boolean wechatValid;
-    private static boolean qqValid;
-    private static boolean sinaValid;
+    private boolean mWechatValid;
+    private boolean mQqValid;
+    private boolean mSinaValid;
+    private Map<String, Boolean> mAppMaps;
+
+    private static ShareUtil INSTANCE;
+
+    public static ShareUtil getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ShareUtil();
+        }
+        return INSTANCE;
+    }
 
     /**
      * 调起分享按钮分享
      */
-    public static void share(Context context, ShareBean shareBean) {
+    public void share(Context context, ShareBean shareBean) {
         share(context, Platform.SHARE_WEBPAGE, shareBean);
     }
 
-    public static void share(Context context, int shareType, ShareBean shareBean) {
+    public void share(Context context, int shareType, ShareBean shareBean) {
+        if (shareBean == null){
+            return;
+        }
         try {
             ShareSDK.closeDebug();
             ShareSDK.initSDK(context);
@@ -55,28 +71,31 @@ public class ShareUtil {
     /**
      * 直接分享
      */
-    public static <T extends Platform.ShareParams> void directShare(Context context, T sp, String platformName, ShareBean shareBean) {
-        directShare(context, sp, Platform.SHARE_WEBPAGE, platformName, shareBean);
+    public void directShare(Context context, String platformName, ShareBean shareBean) {
+        directShare(context, Platform.SHARE_WEBPAGE, platformName, shareBean);
     }
 
-    public static <T extends Platform.ShareParams> void directShare(Context context, T sp, int shareType, String platformName, ShareBean shareBean) {
-        if (shareBean == null) {
+    public void directShare(Context context, int shareType, String platformName, ShareBean shareBean) {
+
+        Platform.ShareParams sp = getShareParams(platformName);
+
+        if (shareBean == null || sp == null) {
             return;
         }
 
         checkAppIsInstalled(context);
 
-        if (PlatformUtil.PLATFORM_WECHAT_MOMENTS.equals(platformName) && (shareBean.getTimeline() == null || !wechatValid)) {
+        if (PlatformUtil.PLATFORM_WECHAT_MOMENTS.equals(platformName) && (shareBean.getTimeline() == null || !mWechatValid)) {
             return;
-        }else if (PlatformUtil.PLATFORM_WECHAT.equals(platformName) && (shareBean.getAppMessage() == null || !wechatValid)) {
+        }else if (PlatformUtil.PLATFORM_WECHAT.equals(platformName) && (shareBean.getAppMessage() == null || !mWechatValid)) {
             return;
         }else if (PlatformUtil.PLATFORM_SHHORT_MESSAGE.equals(platformName) && shareBean.getSms() == null) {
             return;
-        }else if (PlatformUtil.PLATFORM_QQ.equals(platformName) && (shareBean.getQqFriend() == null || !qqValid)) {
+        }else if (PlatformUtil.PLATFORM_QQ.equals(platformName) && (shareBean.getQqFriend() == null || !mQqValid)) {
             return;
-        }else if (PlatformUtil.PLATFORM_QZONE.equals(platformName) && (shareBean.getQqZone() == null || !qqValid)) {
+        }else if (PlatformUtil.PLATFORM_QZONE.equals(platformName) && (shareBean.getQqZone() == null || !mQqValid)) {
             return;
-        }else if (PlatformUtil.PLATFORM_SINA_WEIBO.equals(platformName) && (shareBean.getWeibo() == null || !sinaValid)) {
+        }else if (PlatformUtil.PLATFORM_SINA_WEIBO.equals(platformName) && (shareBean.getWeibo() == null || !mSinaValid)) {
             return;
         }
 
@@ -98,46 +117,80 @@ public class ShareUtil {
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    private static void prepareShare(Context context, final int shareType, final ShareBean shareBean, OnekeyShare oks) {
-        if (shareBean == null){
-            return;
+    /**
+     * 通过反射获取ShareParams对象
+     * @param platformName
+     * @return
+     */
+    private Platform.ShareParams getShareParams(String platformName) {
+        Platform.ShareParams sp = null;
+        String classPath = null;
+        try {
+            switch (platformName) {
+                case PlatformUtil.PLATFORM_QQ :
+                    classPath = "cn.sharesdk.tencent.qq.QQ$ShareParams";
+                    break;
+                case PlatformUtil.PLATFORM_QZONE :
+                    classPath = "cn.sharesdk.tencent.qzone.QZone$ShareParams";
+                    break;
+                case PlatformUtil.PLATFORM_WECHAT :
+                    classPath = "cn.sharesdk.wechat.friends.Wechat$ShareParams";
+                    break;
+                case PlatformUtil.PLATFORM_WECHAT_MOMENTS :
+                    classPath = "cn.sharesdk.wechat.moments.WechatMoments$ShareParams";
+                    break;
+                case PlatformUtil.PLATFORM_SINA_WEIBO :
+                    classPath = "cn.sharesdk.sina.weibo.SinaWeibo$ShareParams";
+                    break;
+                case PlatformUtil.PLATFORM_SHHORT_MESSAGE :
+                    classPath = "cn.sharesdk.system.text.ShortMessage$ShareParams";
+                    break;
+            }
+            Class<Platform.ShareParams> aClass = (Class<Platform.ShareParams>) Class.forName(classPath);
+            sp = aClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return sp;
+    }
+
+    private void prepareShare(Context context, final int shareType, final ShareBean shareBean, OnekeyShare oks) {
         checkAppIsInstalled(context);
 
         List<String> showTypes = new ArrayList<>();
         List<String> hideTypes = new ArrayList<>();
-        if (shareBean.getTimeline() != null && wechatValid) {
+        if (shareBean.getTimeline() != null && mWechatValid && BuildConfig.compileWechatMoments) {
             showTypes.add(PlatformUtil.PLATFORM_WECHAT_MOMENTS);
         }else{
             hideTypes.add(PlatformUtil.PLATFORM_WECHAT_MOMENTS);
         }
-        if (shareBean.getAppMessage() != null && wechatValid) {
+        if (shareBean.getAppMessage() != null && mWechatValid && BuildConfig.compileWechat) {
             showTypes.add(PlatformUtil.PLATFORM_WECHAT);
         }else{
             hideTypes.add(PlatformUtil.PLATFORM_WECHAT);
         }
-        if (shareBean.getSms() != null) {
+        if (shareBean.getSms() != null && BuildConfig.compileShortMessage) {
             showTypes.add(PlatformUtil.PLATFORM_SHHORT_MESSAGE);
         }else{
             hideTypes.add(PlatformUtil.PLATFORM_SHHORT_MESSAGE);
         }
-        if (shareBean.getQqFriend() != null && qqValid) {
+        if (shareBean.getQqFriend() != null && mQqValid && BuildConfig.compileQQ) {
             showTypes.add(PlatformUtil.PLATFORM_QQ);
         }else{
             hideTypes.add(PlatformUtil.PLATFORM_QQ);
         }
-        if (shareBean.getQqZone() != null && qqValid) {
+        if (shareBean.getQqZone() != null && mQqValid && BuildConfig.compileQZone) {
             showTypes.add(PlatformUtil.PLATFORM_QZONE);
         }else{
             hideTypes.add(PlatformUtil.PLATFORM_QZONE);
         }
-        if (shareBean.getWeibo() != null && sinaValid) {
+        if (shareBean.getWeibo() != null && mSinaValid && BuildConfig.compileSinaWeibo) {
             showTypes.add(PlatformUtil.PLATFORM_SINA_WEIBO);
         }else{
             hideTypes.add(PlatformUtil.PLATFORM_SINA_WEIBO);
         }
 
-        ShareUtil.shareCustomizeContent(showTypes, hideTypes, oks, new ShareContentCustomizeCallback() {
+        shareCustomizeContent(showTypes, hideTypes, oks, new ShareContentCustomizeCallback() {
             @Override
             public void onShare(Platform platform, Platform.ShareParams sp) {
                 setShareParams(platform, sp, shareType, shareBean);
@@ -145,13 +198,27 @@ public class ShareUtil {
         });
     }
 
-    private static void checkAppIsInstalled(Context context) {
-        wechatValid = CommonUtil.isInstalled(context, PlatformUtil.PACKAGE_WECHAT);
-        qqValid = CommonUtil.isInstalled(context, PlatformUtil.PACKAGE_QQ);
-        sinaValid = CommonUtil.isInstalled(context, PlatformUtil.PACKAGE_SINA);
+    private void checkAppIsInstalled(Context context) {
+        /*
+        //以下写法会导致Binder超出1M 抛出异常
+        mWechatValid = CommonUtil.isInstalled(context, PlatformUtil.PACKAGE_WECHAT);
+        mQqValid = CommonUtil.isInstalled(context, PlatformUtil.PACKAGE_QQ);
+        mSinaValid = CommonUtil.isInstalled(context, PlatformUtil.PACKAGE_SINA);*/
+
+        if (mAppMaps == null) {
+            mAppMaps = new HashMap<>();
+        }
+        mAppMaps.put(PlatformUtil.PACKAGE_QQ, false);
+        mAppMaps.put(PlatformUtil.PACKAGE_SINA, false);
+        mAppMaps.put(PlatformUtil.PACKAGE_WECHAT, false);
+        CommonUtil.isInstalled(context, mAppMaps);
+
+        mQqValid = mAppMaps.get(PlatformUtil.PACKAGE_QQ);
+        mSinaValid = mAppMaps.get((PlatformUtil.PACKAGE_SINA));
+        mWechatValid = mAppMaps.get(PlatformUtil.PACKAGE_WECHAT);
     }
 
-    private static void setShareParams(Platform platform, Platform.ShareParams sp, int shareType, ShareBean shareBean) {
+    private void setShareParams(Platform platform, Platform.ShareParams sp, int shareType, ShareBean shareBean) {
         sp.setShareType(shareType);
         if (PlatformUtil.PLATFORM_WECHAT.equals(platform.getName()) && shareBean.getAppMessage() != null) {
             sp.setUrl(shareBean.getAppMessage().getLink());
@@ -185,7 +252,7 @@ public class ShareUtil {
         }
     }
 
-    private static void shareCustomizeContent(List<String> showTypes, List<String> hideTypes, OnekeyShare oks, ShareContentCustomizeCallback customizeCallback) {
+    private void shareCustomizeContent(List<String> showTypes, List<String> hideTypes, OnekeyShare oks, ShareContentCustomizeCallback customizeCallback) {
         //隐藏没有数据或者未安装的app
         for (String platform : hideTypes) {
             oks.addHiddenPlatform(platform);

@@ -9,22 +9,51 @@ android {
         targetSdkVersion Integer.parseInt(projectTargetSdkVersion)
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [QQ_APP_ID: qqAppId]
+
+        //配置BuildConfig 代码中直接引用
+        buildConfigField "boolean", "compileQQ", compileQQ
+        buildConfigField "boolean", "compileQZone", compileQZone
+        buildConfigField "boolean", "compileWechat", compileWechat
+        buildConfigField "boolean", "compileWechatMoments", compileWechatMoments
+        buildConfigField "boolean", "compileSinaWeibo", compileSinaWeibo
+        buildConfigField "boolean", "compileShortMessage", compileShortMessage
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23+'
+    //compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:22+'
 
-    compile files('libs/MobCommons-2016.1222.1756.jar')//sharesdk基本jar包
-    compile files('libs/MobTools-2016.1222.1756.jar')//sharesdk基本jar包
-    compile files('libs/ShareSDK-Core-2.8.0.jar')//sharesdk基本jar包
+    compile files('libs/MobCommons-2016.1222.1756.jar')
+    compile files('libs/MobTools-2016.1222.1756.jar')
+    compile files('libs/ShareSDK-Core-2.8.0.jar')
 
+    if (compileQQ.toBoolean()) {
+        compile files('libs/ShareSDK-QQ-2.8.0.jar')
+    }
+    if (compileQZone.toBoolean()) {
+        compile files('libs/ShareSDK-QZone-2.8.0.jar')
+    }
+    if (compileSinaWeibo.toBoolean()) {
+        compile files('libs/ShareSDK-SinaWeibo-2.8.0.jar')
+    }
+    if (compileWechat.toBoolean() || compileWechatMoments.toBoolean()) {
+        compile files('libs/ShareSDK-Wechat-Core-2.8.0.jar')
+    }
+    if (compileWechat.toBoolean()) {
+        compile files('libs/ShareSDK-Wechat-2.8.0.jar')
+    }
+    if (compileWechatMoments.toBoolean()) {
+        compile files('libs/ShareSDK-Wechat-Moments-2.8.0.jar')
+    }
+    if (compileShortMessage.toBoolean()) {
+        compile files('libs/ShareSDK-ShortMessage-2.8.0.jar')
+    }
 }

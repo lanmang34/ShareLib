@@ -9,11 +9,9 @@ import com.alibaba.fastjson.JSON;
 import com.lanmang.sharelib.entry.ShareBean;
 import com.lanmang.sharelib.login.ThirdLoginUtil;
 import com.lanmang.sharelib.share.ShareUtil;
+import com.lanmang.sharelib.util.PlatformUtil;
 
 import cn.sharesdk.framework.Platform;
-import cn.sharesdk.sina.weibo.SinaWeibo;
-import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.wechat.friends.Wechat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,24 +73,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void directShare(View v) {
-        Platform.ShareParams sp = new Wechat.ShareParams();
-        ShareUtil.directShare(this, sp, Wechat.NAME, shareBean);
+        ShareUtil.getInstance().directShare(this, PlatformUtil.PLATFORM_WECHAT, shareBean);
     }
 
     public void shareWithBtn(View v) {
-        ShareUtil.share(this, shareBean);
+        ShareUtil.getInstance().share(this, shareBean);
     }
 
     public void loginByWechat(View v) {
-        ThirdLoginUtil.getInstance().thirdLogin(this, Wechat.NAME, mOnThirdLoginListener);
+        ThirdLoginUtil.getInstance().thirdLogin(this, PlatformUtil.PLATFORM_WECHAT, mOnThirdLoginListener);
     }
 
     public void loginByQQ(View v) {
-        ThirdLoginUtil.getInstance().thirdLogin(this, QQ.NAME, mOnThirdLoginListener);
+        ThirdLoginUtil.getInstance().thirdLogin(this, PlatformUtil.PLATFORM_QQ, mOnThirdLoginListener);
     }
 
     public void loginByWeibo(View v) {
-        ThirdLoginUtil.getInstance().thirdLogin(this, SinaWeibo.NAME, mOnThirdLoginListener);
+        //ThirdLoginUtil.getInstance().thirdLogin(this, PlatformUtil.PLATFORM_SINA_WEIBO, mOnThirdLoginListener);
     }
 
 }

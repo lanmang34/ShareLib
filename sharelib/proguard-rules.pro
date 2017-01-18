@@ -17,7 +17,13 @@
 #}
 
 # 实体
--keep class com.lanmang.sharelib.entry.**{*;}
+# 避免混淆泛型,异常,内部类
+-keep class com.lanmang.sharelib.entry.** { *; }
+# support library
+-keepnames class android.support.** { *; }
+
+# 保护注解、泛型。保留源文件名、行号，便于分析崩溃堆栈信息。
+-keepattributes *Annotation*,Signature,SourceFile,LineNumberTable,InnerClasses
 
 # Sharesdk
 -keep class cn.sharesdk.**{*;}

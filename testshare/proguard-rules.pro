@@ -19,14 +19,3 @@
 # fastjson
 -dontwarn com.alibaba.fastjson.**
 -keep class com.alibaba.fastjson.** { *; }
-
-# Sharesdk
--keep class cn.sharesdk.**{*;}
--keep class com.sina.**{*;}
--keep class com.mob.** {*;}
--keep class **.R$* {*;}
--keep class **.R{*;}
--dontwarn cn.sharesdk.**
--dontwarn com.mob.**
--dontwarn **.R$*
-# End Sharesdk
