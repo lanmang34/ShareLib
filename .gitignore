@@ -3,6 +3,8 @@
 build
 /captures
 /local.properties
+# Local configuration file (sdk path, etc)
+local.properties
 *.iml
 /.idea/workspace.xml
 /.idea/libraries
