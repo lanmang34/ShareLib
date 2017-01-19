@@ -2,7 +2,7 @@ package com.lanmang.sharelib.login;
 
 import android.content.Context;
 
-import com.lanmang.sharelib.util.CommonUtil;
+import com.lanmang.sharelib.util.LibCommonUtil;
 import com.lanmang.sharelib.util.PlatformUtil;
 
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class ThirdLoginUtil {
 
         @Override
         public void onError(Platform platform, int i, Throwable throwable) {
-            showErr(platform, i, throwable);
+            showErr(platform.getName(), i, throwable);
         }
 
         @Override
@@ -63,14 +63,20 @@ public class ThirdLoginUtil {
      * @param onThirdLoginListener
      */
     public void thirdLogin(Context context, String platformName, OnThirdLoginListener onThirdLoginListener) {
+
         if (isThirdLoging) {
             return;
         }
         isThirdLoging = true;
         mOnThirdLoginListener = onThirdLoginListener;
-        boolean appIsInstalled = checkAppIsInstalled(context, platformName);
-        if (!appIsInstalled) {
-            showErr(null, PlatformUtil.ERR_APP_UNINSTALLED, null);
+
+        if (LibCommonUtil.getShareClass(platformName) == null) {
+            showErr(platformName, PlatformUtil.ERR_APP_WITHOUT_JAR, null);
+            return;
+        }
+
+        if (!checkAppIsInstalled(context, platformName)) {
+            showErr(platformName, PlatformUtil.ERR_APP_UNINSTALLED, null);
             return;
         }
 
@@ -90,17 +96,17 @@ public class ThirdLoginUtil {
     private boolean checkAppIsInstalled(Context context, String platformName) {
         switch (platformName) {
             case PlatformUtil.PLATFORM_WECHAT :
-                if (CommonUtil.isInstalled(context, PlatformUtil.PACKAGE_WECHAT)) {
+                if (LibCommonUtil.isInstalled(context, PlatformUtil.PACKAGE_WECHAT)) {
                     return true;
                 }
                 break;
             case PlatformUtil.PLATFORM_QQ :
-                if (CommonUtil.isInstalled(context, PlatformUtil.PACKAGE_QQ)) {
+                if (LibCommonUtil.isInstalled(context, PlatformUtil.PACKAGE_QQ)) {
                     return true;
                 }
                 break;
             case PlatformUtil.PLATFORM_SINA_WEIBO :
-                if (CommonUtil.isInstalled(context, PlatformUtil.PACKAGE_SINA)) {
+                if (LibCommonUtil.isInstalled(context, PlatformUtil.PACKAGE_SINA)) {
                     return true;
                 }
                 break;
@@ -109,9 +115,12 @@ public class ThirdLoginUtil {
         return false;
     }
 
-    private void showErr(Platform platform, int errCode, Throwable throwable) {
+    private void showErr(String platformName, int errCode, Throwable throwable) {
         if (mOnThirdLoginListener != null) {
-            mOnThirdLoginListener.failure(platform, errCode, throwable);
+            if (throwable == null) {
+                throwable = LibCommonUtil.getThrowable(errCode);
+            }
+            mOnThirdLoginListener.failure(platformName, errCode, throwable);
         }
         isThirdLoging = false;
     }
@@ -119,6 +128,6 @@ public class ThirdLoginUtil {
     public interface OnThirdLoginListener {
         void success(Platform platform, String token, String openId);
         void cancel(Platform platform);
-        void failure(Platform platform, int errCode, Throwable throwable);
+        void failure(String platformName, int errCode, Throwable throwable);
     }
 }

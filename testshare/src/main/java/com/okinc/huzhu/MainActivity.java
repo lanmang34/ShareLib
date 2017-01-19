@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void failure(Platform platform, int errCode, Throwable throwable) {
-            Toast.makeText(MainActivity.this, platform.getName() + "授权失败, errCode = " + errCode, Toast.LENGTH_SHORT).show();
+        public void failure(String platformName, int errCode, Throwable throwable) {
+            Toast.makeText(MainActivity.this, platformName + "授权失败, errCode = " + errCode + ", detailMessage : " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     };
@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //ShareConfigUtil.isShowWechatMomentsShare = false;//设置不显示微信朋友圈分享
 
         String shareBeanJson = "{\"appMessage\":{\"desc\":\"如遇大病或意外，可为您提供最高30万元救助金\"," +
                 "\"imgUrl\":\"http://t.bafanghuzhu.com/v_20160830027/image/share/share_default.jpg\"," +
@@ -72,8 +74,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void directShare(View v) {
+    public void directShareToWechat(View v) {
         ShareUtil.getInstance().directShare(this, PlatformUtil.PLATFORM_WECHAT, shareBean);
+    }
+    public void directShareToWechatMoments(View v) {
+        ShareUtil.getInstance().directShare(this, PlatformUtil.PLATFORM_WECHAT_MOMENTS, shareBean);
+    }
+    public void directShareToQQ(View v) {
+        ShareUtil.getInstance().directShare(this, PlatformUtil.PLATFORM_QQ, shareBean);
+    }
+    public void directShareToQZone(View v) {
+        ShareUtil.getInstance().directShare(this, Platform.SHARE_WEBPAGE, PlatformUtil.PLATFORM_QZONE, shareBean);
+    }
+    public void directShareToSinaWeibo(View v) {
+        ShareUtil.getInstance().directShare(this, PlatformUtil.PLATFORM_SINA_WEIBO, shareBean);
+    }
+    public void directShareToShortMessage(View v) {
+        ShareUtil.getInstance().directShare(this, Platform.SHARE_TEXT, PlatformUtil.PLATFORM_SHORT_MESSAGE, shareBean);
     }
 
     public void shareWithBtn(View v) {
@@ -89,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loginByWeibo(View v) {
-        //ThirdLoginUtil.getInstance().thirdLogin(this, PlatformUtil.PLATFORM_SINA_WEIBO, mOnThirdLoginListener);
+        ThirdLoginUtil.getInstance().thirdLogin(this, PlatformUtil.PLATFORM_SINA_WEIBO, mOnThirdLoginListener);
     }
 
 }

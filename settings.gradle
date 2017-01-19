@@ -1,1 +1,1 @@
-include ':sharelib', ':testshare'
+include ':sharelib', ':testshare', ':otherlibs'

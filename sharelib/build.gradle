@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+/*apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'*/
 
 version = "1.0.0" //aar的版本号
 
@@ -13,15 +13,15 @@ android {
         targetSdkVersion Integer.parseInt(projectTargetSdkVersion)
         versionCode 1
         versionName "1.0"
-        manifestPlaceholders = [QQ_APP_ID: qqAppId]
+        //manifestPlaceholders = [QQ_APP_ID: qqAppId]
 
         //配置BuildConfig 代码中直接引用
-        buildConfigField "boolean", "compileQQ", compileQQ
+        /*buildConfigField "boolean", "compileQQ", compileQQ
         buildConfigField "boolean", "compileQZone", compileQZone
         buildConfigField "boolean", "compileWechat", compileWechat
         buildConfigField "boolean", "compileWechatMoments", compileWechatMoments
         buildConfigField "boolean", "compileSinaWeibo", compileSinaWeibo
-        buildConfigField "boolean", "compileShortMessage", compileShortMessage
+        buildConfigField "boolean", "compileShortMessage", compileShortMessage*/
     }
 
     buildTypes {
@@ -38,7 +38,9 @@ dependencies {
     compile files('libs/MobCommons-2016.1222.1756.jar')
     compile files('libs/MobTools-2016.1222.1756.jar')
     compile files('libs/ShareSDK-Core-2.8.0.jar')
+    compile files('libs/ShareSDK-Wechat-Core-2.8.0.jar')
 
+/*
     if (compileQQ.toBoolean()) {
         compile files('libs/ShareSDK-QQ-2.8.0.jar')
     }
@@ -60,7 +62,9 @@ dependencies {
     if (compileShortMessage.toBoolean()) {
         compile files('libs/ShareSDK-ShortMessage-2.8.0.jar')
     }
+*/
 }
+/*
 
 def siteUrl = 'https://github.com/lanmang34/ShareLib'    // 项目主页
 def gitUrl = 'https://github.com/lanmang34/ShareLib.git' // 项目的git地址
@@ -127,4 +131,4 @@ bintray {
         licenses = ["Apache-2.0"]
         publish = true
     }
-}
+}*/

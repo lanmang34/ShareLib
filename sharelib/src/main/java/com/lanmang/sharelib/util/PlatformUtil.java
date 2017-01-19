@@ -12,7 +12,7 @@ public class PlatformUtil {
     public static final String PLATFORM_QQ = "QQ";
     public static final String PLATFORM_QZONE = "QZone";
     public static final String PLATFORM_SINA_WEIBO = "SinaWeibo";
-    public static final String PLATFORM_SHHORT_MESSAGE = "ShortMessage";
+    public static final String PLATFORM_SHORT_MESSAGE = "ShortMessage";
 
     //第三方登录应用的包名
     public static final String PACKAGE_WECHAT = "com.tencent.mm";//微信
@@ -21,4 +21,5 @@ public class PlatformUtil {
 
     //第三方登录回调错误码
     public static final int ERR_APP_UNINSTALLED = 101;//应用未安装
+    public static final int ERR_APP_WITHOUT_JAR = 102;//未导入jar包
 }

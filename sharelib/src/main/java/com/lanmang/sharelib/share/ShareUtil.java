@@ -2,10 +2,10 @@ package com.lanmang.sharelib.share;
 
 import android.content.Context;
 
-import com.lanmang.sharelib.BuildConfig;
 import com.lanmang.sharelib.entry.ShareBean;
-import com.lanmang.sharelib.util.CommonUtil;
+import com.lanmang.sharelib.util.LibCommonUtil;
 import com.lanmang.sharelib.util.PlatformUtil;
+import com.lanmang.sharelib.util.ShareConfigUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,7 +89,7 @@ public class ShareUtil {
             return;
         }else if (PlatformUtil.PLATFORM_WECHAT.equals(platformName) && (shareBean.getAppMessage() == null || !mWechatValid)) {
             return;
-        }else if (PlatformUtil.PLATFORM_SHHORT_MESSAGE.equals(platformName) && shareBean.getSms() == null) {
+        }else if (PlatformUtil.PLATFORM_SHORT_MESSAGE.equals(platformName) && shareBean.getSms() == null) {
             return;
         }else if (PlatformUtil.PLATFORM_QQ.equals(platformName) && (shareBean.getQqFriend() == null || !mQqValid)) {
             return;
@@ -123,35 +123,12 @@ public class ShareUtil {
      * @return
      */
     private Platform.ShareParams getShareParams(String platformName) {
-        Platform.ShareParams sp = null;
-        String classPath = null;
         try {
-            switch (platformName) {
-                case PlatformUtil.PLATFORM_QQ :
-                    classPath = "cn.sharesdk.tencent.qq.QQ$ShareParams";
-                    break;
-                case PlatformUtil.PLATFORM_QZONE :
-                    classPath = "cn.sharesdk.tencent.qzone.QZone$ShareParams";
-                    break;
-                case PlatformUtil.PLATFORM_WECHAT :
-                    classPath = "cn.sharesdk.wechat.friends.Wechat$ShareParams";
-                    break;
-                case PlatformUtil.PLATFORM_WECHAT_MOMENTS :
-                    classPath = "cn.sharesdk.wechat.moments.WechatMoments$ShareParams";
-                    break;
-                case PlatformUtil.PLATFORM_SINA_WEIBO :
-                    classPath = "cn.sharesdk.sina.weibo.SinaWeibo$ShareParams";
-                    break;
-                case PlatformUtil.PLATFORM_SHHORT_MESSAGE :
-                    classPath = "cn.sharesdk.system.text.ShortMessage$ShareParams";
-                    break;
-            }
-            Class<Platform.ShareParams> aClass = (Class<Platform.ShareParams>) Class.forName(classPath);
-            sp = aClass.newInstance();
+            return LibCommonUtil.getShareClass(platformName).newInstance();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return sp;
     }
 
     private void prepareShare(Context context, final int shareType, final ShareBean shareBean, OnekeyShare oks) {
@@ -159,32 +136,32 @@ public class ShareUtil {
 
         List<String> showTypes = new ArrayList<>();
         List<String> hideTypes = new ArrayList<>();
-        if (shareBean.getTimeline() != null && mWechatValid && BuildConfig.compileWechatMoments) {
+        if (ShareConfigUtil.isShowWechatMomentsShare && shareBean.getTimeline() != null && mWechatValid && LibCommonUtil.getShareClass(PlatformUtil.PLATFORM_WECHAT_MOMENTS) != null) {
             showTypes.add(PlatformUtil.PLATFORM_WECHAT_MOMENTS);
         }else{
             hideTypes.add(PlatformUtil.PLATFORM_WECHAT_MOMENTS);
         }
-        if (shareBean.getAppMessage() != null && mWechatValid && BuildConfig.compileWechat) {
+        if (ShareConfigUtil.isShowWechatShare && shareBean.getAppMessage() != null && mWechatValid && LibCommonUtil.getShareClass(PlatformUtil.PLATFORM_WECHAT) != null) {
             showTypes.add(PlatformUtil.PLATFORM_WECHAT);
         }else{
             hideTypes.add(PlatformUtil.PLATFORM_WECHAT);
         }
-        if (shareBean.getSms() != null && BuildConfig.compileShortMessage) {
-            showTypes.add(PlatformUtil.PLATFORM_SHHORT_MESSAGE);
+        if (ShareConfigUtil.isShowShortMessageShare && shareBean.getSms() != null && LibCommonUtil.getShareClass(PlatformUtil.PLATFORM_SHORT_MESSAGE) != null) {
+            showTypes.add(PlatformUtil.PLATFORM_SHORT_MESSAGE);
         }else{
-            hideTypes.add(PlatformUtil.PLATFORM_SHHORT_MESSAGE);
+            hideTypes.add(PlatformUtil.PLATFORM_SHORT_MESSAGE);
         }
-        if (shareBean.getQqFriend() != null && mQqValid && BuildConfig.compileQQ) {
+        if (ShareConfigUtil.isShowQQShare && shareBean.getQqFriend() != null && mQqValid && LibCommonUtil.getShareClass(PlatformUtil.PLATFORM_QQ) != null) {
             showTypes.add(PlatformUtil.PLATFORM_QQ);
         }else{
             hideTypes.add(PlatformUtil.PLATFORM_QQ);
         }
-        if (shareBean.getQqZone() != null && mQqValid && BuildConfig.compileQZone) {
+        if (ShareConfigUtil.isShowQZoneShare && shareBean.getQqZone() != null && mQqValid && LibCommonUtil.getShareClass(PlatformUtil.PLATFORM_QZONE) != null) {
             showTypes.add(PlatformUtil.PLATFORM_QZONE);
         }else{
             hideTypes.add(PlatformUtil.PLATFORM_QZONE);
         }
-        if (shareBean.getWeibo() != null && mSinaValid && BuildConfig.compileSinaWeibo) {
+        if (ShareConfigUtil.isShowSinaWeiboShare && shareBean.getWeibo() != null && mSinaValid && LibCommonUtil.getShareClass(PlatformUtil.PLATFORM_SINA_WEIBO) != null) {
             showTypes.add(PlatformUtil.PLATFORM_SINA_WEIBO);
         }else{
             hideTypes.add(PlatformUtil.PLATFORM_SINA_WEIBO);
@@ -201,9 +178,9 @@ public class ShareUtil {
     private void checkAppIsInstalled(Context context) {
         /*
         //以下写法会导致Binder超出1M 抛出异常
-        mWechatValid = CommonUtil.isInstalled(context, PlatformUtil.PACKAGE_WECHAT);
-        mQqValid = CommonUtil.isInstalled(context, PlatformUtil.PACKAGE_QQ);
-        mSinaValid = CommonUtil.isInstalled(context, PlatformUtil.PACKAGE_SINA);*/
+        mWechatValid = LibCommonUtil.isInstalled(context, PlatformUtil.PACKAGE_WECHAT);
+        mQqValid = LibCommonUtil.isInstalled(context, PlatformUtil.PACKAGE_QQ);
+        mSinaValid = LibCommonUtil.isInstalled(context, PlatformUtil.PACKAGE_SINA);*/
 
         if (mAppMaps == null) {
             mAppMaps = new HashMap<>();
@@ -211,7 +188,7 @@ public class ShareUtil {
         mAppMaps.put(PlatformUtil.PACKAGE_QQ, false);
         mAppMaps.put(PlatformUtil.PACKAGE_SINA, false);
         mAppMaps.put(PlatformUtil.PACKAGE_WECHAT, false);
-        CommonUtil.isInstalled(context, mAppMaps);
+        LibCommonUtil.isInstalled(context, mAppMaps);
 
         mQqValid = mAppMaps.get(PlatformUtil.PACKAGE_QQ);
         mSinaValid = mAppMaps.get((PlatformUtil.PACKAGE_SINA));
@@ -230,7 +207,7 @@ public class ShareUtil {
             sp.setText(shareBean.getTimeline().getTitle());
             sp.setUrl(shareBean.getTimeline().getLink());
             sp.setImageUrl(shareBean.getTimeline().getImgUrl());
-        } else if (PlatformUtil.PLATFORM_SHHORT_MESSAGE.equals(platform.getName()) && shareBean.getTimeline() != null) {
+        } else if (PlatformUtil.PLATFORM_SHORT_MESSAGE.equals(platform.getName()) && shareBean.getTimeline() != null) {
             sp.setText(shareBean.getSms());
         } else if (PlatformUtil.PLATFORM_QQ.equals(platform.getName()) && shareBean.getQqFriend() != null) {
             ShareBean.QQFriend qqFriend = shareBean.getQqFriend();
