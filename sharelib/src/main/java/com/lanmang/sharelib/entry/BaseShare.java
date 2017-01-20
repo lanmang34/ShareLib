@@ -50,6 +50,8 @@ public abstract class BaseShare {
         if (mSp == null) {
             try {
                 mSp = getShareClass().newInstance();
+                //设置shareType, 微信会检测链接, 链接错误会导致无法分享
+                mSp.setShareType(shareType);
                 setShareParams(mSp);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -80,8 +80,8 @@ public class ShareUtil {
             ShareSDK.closeDebug();
             ShareSDK.initSDK(context);
             Platform platform = ShareSDK.getPlatform(baseShare.getPlatformName());
-            platform.SSOSetting(true);
             platform.share(baseShare.getShareParams());
+            platform.SSOSetting(true);
             ShareSDK.stopSDK();
         } catch (Exception e) {
             e.printStackTrace();
@@ -148,7 +148,9 @@ public class ShareUtil {
             @Override
             public void onShare(Platform platform, Platform.ShareParams sp) {
                 BaseShare baseShare = mBaseShares.get(platform.getName());
+                //设置shareType, 微信会检测链接, 链接错误会导致无法分享
                 baseShare.setShareType(shareType);
+                sp.setShareType(shareType);
                 baseShare.setShareParams(sp);
             }
         });

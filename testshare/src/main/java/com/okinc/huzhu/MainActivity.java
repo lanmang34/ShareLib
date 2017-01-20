@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         //ShareConfigUtil.isShowWechatMomentsShare = false;//设置不显示微信朋友圈分享
 
         String shareBeanJson = "{\"appMessage\":{\"desc\":\"如遇大病或意外，可为您提供最高30万元救助金\"," +
-                "\"imgUrl\":\"http://t.bafanghuzhu.com/v_20160830027/image/share/share_default.jpg\"," +
-                "\"link\":\"http://t.bafanghuzhu.com/page/index_v2.do\"," +
+                "\"imgUrl\":\"http://img1.ph.126.net/6g2ITTn9e_s6mapqfY0vcg==/6608598146073590065.jpg\"," +
+                "\"link\":\"https://www.baidu.com/\"," +
                 "\"title\":\"我已加入八方互助，送您一份最高30万的大病互助\"}," +
                 "\"qqFriend\":{\"imageUrl\":\"http://t.bafanghuzhu.com/v_20160830027/image/share/share_default.jpg\"," +
                 "\"summary\":\"如遇大病或意外，可为您提供最高30万元救助金\"," +
@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
                 "\"title\":\"我已加入八方互助，送您一份最高30万的大病互助\"}," +
                 "\"sms\":\"我已加入八方互助，送您一份最高30万的大病互助，如遇大病或意外，可为您提供最高30万元救助金，点击查收：https://www.bafang.com\"," +
                 "\"timeline\":{\"desc\":\"如遇大病或意外，可为您提供最高30万元救助金\"," +
-                "\"imgUrl\":\"http://t.bafanghuzhu.com/v_20160830027/image/share/share_default.jpg\"," +
-                "\"link\":\"http://t.bafanghuzhu.com/page/index_v2.do\"," +
+                "\"imgUrl\":\"http://img1.ph.126.net/6g2ITTn9e_s6mapqfY0vcg==/6608598146073590065.jpg\"," +
+                "\"link\":\"https://www.baidu.com/\"," +
                 "\"title\":\"我已加入八方互助，送您一份最高30万的大病互助\"}," +
                 "\"weibo\":{\"shareDesc\":\"我已加入八方互助，送您一份最高30万的大病互助 如遇大病或意外，可为您提供最高30万元救助金\"," +
                 "\"shareTitle\":\"我已加入八方互助，送您一份最高30万的大病互助\"," +
