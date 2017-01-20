@@ -52,6 +52,10 @@ public class ShareUtil {
         mBaseShares.put(PlatformUtil.PLATFORM_SHORT_MESSAGE, ShortMessageShare.getInstance());
     }
 
+    public boolean hasShareParams(String platformName) {
+        return mBaseShares.get(platformName) == null;
+    }
+
     /**
      * 直接分享
      */
@@ -138,17 +142,7 @@ public class ShareUtil {
             baseShare.setShareBean(shareBean);
         }
 
-        List<String> showTypes = new ArrayList<>();
-        List<String> hideTypes = new ArrayList<>();
-        for (BaseShare baseShare : mBaseShares.values()) {
-            if (baseShare.isShow(mAppMaps.get(baseShare.getPackageName()))) {
-                showTypes.add(baseShare.getPlatformName());
-            }else{
-                hideTypes.add(baseShare.getPlatformName());
-            }
-        }
-
-        //shareCustomizeContent(showTypes, hideTypes, oks);
+        hideTypes(oks);
 
         oks.setShareContentCustomizeCallback(new ShareContentCustomizeCallback() {
             @Override
@@ -173,9 +167,22 @@ public class ShareUtil {
 
     }
 
-    private void shareCustomizeContent(List<String> showTypes, List<String> hideTypes, OnekeyShare oks) {
+    /**
+     * 隐藏没有数据或者未安装的app
+     * @param oks
+     */
+    private void hideTypes(OnekeyShare oks) {
 
-        //隐藏没有数据或者未安装的app
+        List<String> showTypes = new ArrayList<>();
+        List<String> hideTypes = new ArrayList<>();
+        for (BaseShare baseShare : mBaseShares.values()) {
+            if (baseShare.isShow(mAppMaps.get(baseShare.getPackageName()))) {
+                showTypes.add(baseShare.getPlatformName());
+            }else{
+                hideTypes.add(baseShare.getPlatformName());
+            }
+        }
+
         for (String platform : hideTypes) {
             oks.addHiddenPlatform(platform);
         }

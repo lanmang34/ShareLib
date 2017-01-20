@@ -49,6 +49,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <Button
+            android:text="调起分享按钮-分享新增平台"
+            android:onClick="shareWithBtn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
             android:text="微信登录"
             android:onClick="loginByWechat"
             android:layout_width="match_parent"

@@ -8,9 +8,6 @@
 
 package cn.sharesdk.onekeyshare.themes.classic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +16,14 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.lanmang.sharelib.share.ShareUtil;
+import com.mob.tools.gui.MobViewPager;
+import com.mob.tools.utils.ResHelper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import cn.sharesdk.framework.CustomPlatform;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.Platform.ShareParams;
@@ -26,9 +31,6 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.CustomerLogo;
 import cn.sharesdk.onekeyshare.OnekeySharePage;
 import cn.sharesdk.onekeyshare.OnekeyShareThemeImpl;
-
-import com.mob.tools.gui.MobViewPager;
-import com.mob.tools.utils.ResHelper;
 
 /** 九宫格的抽象类 */
 public abstract class PlatformPage extends OnekeySharePage {
@@ -103,7 +105,7 @@ public abstract class PlatformPage extends OnekeySharePage {
 			hides = new HashMap<String, String>();
 		}
 		for (Platform p : platforms) {
-			if (!hides.containsKey(p.getName())) {
+			if (!hides.containsKey(p.getName()) && !ShareUtil.getInstance().hasShareParams(p.getName())) {
 				cells.add(p);
 			}
 		}

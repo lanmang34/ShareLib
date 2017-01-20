@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         ShareUtil.getInstance().directShare(this, PlatformUtil.PLATFORM_WECHAT_MOMENTS, shareBean);
     }
     public void directShareToQQ(View v) {
-//        ShareUtil.getInstance().directShare(this, PlatformUtil.PLATFORM_QQ, shareBean);
         QQShare qqShare = QQShare.getInstance();
         qqShare.setShareBean(shareBean);
         ShareUtil.getInstance().directShare(this, qqShare);
@@ -101,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void shareWithBtn(View v) {
-        //ShareUtil.getInstance().share(this, shareBean);
+        ShareUtil.getInstance().share(this, shareBean);
+    }
+    public void shareWithBtn2(View v) {
         QQShare qqShare = QQShare.getInstance();
         List<BaseShare> shares = new ArrayList<>();
         shares.add(qqShare);

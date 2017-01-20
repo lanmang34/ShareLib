@@ -40,7 +40,7 @@ public class ShortMessageShare extends BaseShare {
 
     @Override
     public boolean isShow(boolean isAppInstalled) {
-        return baseCheck() && !TextUtils.isEmpty(getShareBean().getSms()) && ShareConfigUtil.isShowShortMessageShare && isAppInstalled;
+        return baseCheck() && !TextUtils.isEmpty(getShareBean().getSms()) && ShareConfigUtil.isShowShortMessageShare;
     }
 
     @Override
