@@ -6,10 +6,14 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.lanmang.sharelib.entry.BaseShare;
 import com.lanmang.sharelib.entry.ShareBean;
 import com.lanmang.sharelib.login.ThirdLoginUtil;
 import com.lanmang.sharelib.share.ShareUtil;
 import com.lanmang.sharelib.util.PlatformUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.sharesdk.framework.Platform;
 
@@ -81,7 +85,10 @@ public class MainActivity extends AppCompatActivity {
         ShareUtil.getInstance().directShare(this, PlatformUtil.PLATFORM_WECHAT_MOMENTS, shareBean);
     }
     public void directShareToQQ(View v) {
-        ShareUtil.getInstance().directShare(this, PlatformUtil.PLATFORM_QQ, shareBean);
+//        ShareUtil.getInstance().directShare(this, PlatformUtil.PLATFORM_QQ, shareBean);
+        QQShare qqShare = QQShare.getInstance();
+        qqShare.setShareBean(shareBean);
+        ShareUtil.getInstance().directShare(this, qqShare);
     }
     public void directShareToQZone(View v) {
         ShareUtil.getInstance().directShare(this, Platform.SHARE_WEBPAGE, PlatformUtil.PLATFORM_QZONE, shareBean);
@@ -94,7 +101,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void shareWithBtn(View v) {
-        ShareUtil.getInstance().share(this, shareBean);
+        //ShareUtil.getInstance().share(this, shareBean);
+        QQShare qqShare = QQShare.getInstance();
+        List<BaseShare> shares = new ArrayList<>();
+        shares.add(qqShare);
+        ShareUtil.getInstance().share(this, shares, shareBean);
     }
 
     public void loginByWechat(View v) {

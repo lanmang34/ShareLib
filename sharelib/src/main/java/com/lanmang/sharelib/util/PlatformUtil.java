@@ -22,4 +22,12 @@ public class PlatformUtil {
     //第三方登录回调错误码
     public static final int ERR_APP_UNINSTALLED = 101;//应用未安装
     public static final int ERR_APP_WITHOUT_JAR = 102;//未导入jar包
+
+    //分享参数类的classpath
+    public static final String CLASSPATH_QQ = "cn.sharesdk.tencent.qq.QQ$ShareParams";//QQ的分享classpath
+    public static final String CLASSPATH_QZONE = "cn.sharesdk.tencent.qzone.QZone$ShareParams";
+    public static final String CLASSPATH_WECHAT = "cn.sharesdk.wechat.friends.Wechat$ShareParams";
+    public static final String CLASSPATH_WECAHT_MOMENTS = "cn.sharesdk.wechat.moments.WechatMoments$ShareParams";
+    public static final String CLASSPATH_SINA_WEIBO = "cn.sharesdk.sina.weibo.SinaWeibo$ShareParams";
+    public static final String CLASSPATH_SHORT_MESSAGE = "cn.sharesdk.system.text.ShortMessage$ShareParams";
 }
