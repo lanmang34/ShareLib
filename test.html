@@ -4,6 +4,7 @@
 </head>
 <body>
 <br/>
+<h2 onClick="close()">关闭页面</h2>
 <h2 onClick="share()">微信分享图文</h2>
 <h2 onClick="share2()">微信分享图片</h2>
 <a href="okex://login?name=1234567890"><h2>登录(schema)</h2></a>
@@ -12,6 +13,11 @@
 <h2 onClick="spot2()"> 调起币币交易(symbol=eth_btc)</h2>
 </body>
 <script type="text/javascript">
+	
+	function close() {
+		jsbridge('{"uri":request","method":"close","data":"true"}');
+	}
+	
 	function share() {
 		jsbridge('{"uri":"request","method":"share","data":{"body":"分享内容文本","imageUrl":"http://img1.imgtn.bdimg.com/it/u=594559231,2167829292&fm=27&gp=0.jpg","linkUrl":"https://www.baidu.com/","title":"分享标题"},"success":"success","fail":""}');
 	}
