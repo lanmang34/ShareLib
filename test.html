@@ -4,6 +4,7 @@
 </head>
 <body>
 <br/>
+<h2 onClick="getToken()">获取token</h2>
 <h2 onClick="closeWeb()">关闭页面</h2>
 <h2 onClick="share()">微信分享图文</h2>
 <h2 onClick="share2()">微信分享图片</h2>
@@ -13,6 +14,11 @@
 <h2 onClick="spot2()"> 调起币币交易(symbol=eth_btc)</h2>
 </body>
 <script type="text/javascript">
+	
+	function getToken() {
+		var token = window.native.getToken();
+		alert(token);
+	}
 	
 	function closeWeb() {
 		jsbridge('{"uri":"window","method":"close","data":true}');
