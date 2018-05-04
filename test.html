@@ -17,7 +17,11 @@
 	
 	function getToken() {
 		var token = window.native.getToken();
-		alert(token);
+		alert('getToken: ' + token);
+	}
+	
+	function onReloadToken(token) {
+		alert('onReloadToken: ' + token)
 	}
 	
 	function closeWeb() {
