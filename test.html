@@ -9,6 +9,7 @@
 <h2 onClick="share()">分享图文</h2>
 <h2 onClick="share2()">分享图片</h2>
 <h2 onClick="shareBase64()">分享base64图片</h2>
+<h2 onClick="openBrowser()">开启外部浏览器</h2>
 <a href="okex://login?name=1234567890"><h2>登录(schema)</h2></a>
 <h2 onClick="login()">登录(js)</h2>
 <h2 onClick="spot()"> 调起币币交易(无symbol)</h2>
@@ -28,6 +29,10 @@
 	
 	function closeWeb() {
 		jsbridge('{"uri":"window","method":"close","data":true}');
+	}
+	
+	function openBrowser() {
+		jsbridge('{"uri":"window","method":"openBrowser","data":"https://www.baidu.com","success":"success","fail":""}');
 	}
 	
 	function share() {
