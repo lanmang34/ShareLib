@@ -8,6 +8,8 @@
 <h2 onClick="closeWeb()">关闭页面</h2>
 <h2 onClick="share()">分享图文</h2>
 <h2 onClick="share2()">分享图片</h2>
+<h2 onClick="share3()">分享http图片</h2>
+<h2 onClick="share4()">分享https图片</h2>
 <h2 onClick="shareBase64()">分享base64图片</h2>
 <h2 onClick="openBrowser()">开启外部浏览器</h2>
 <a href="okex://login?name=1234567890"><h2>登录(schema)</h2></a>
@@ -41,6 +43,13 @@
 	
 	function share2() {
 		jsbridge('{"uri":"request","method":"shareImage","data":{"body":"分享内容文本","imageUrl":"https://bafangpublic.oss-cn-hangzhou.aliyuncs.com/oksupport/support/activity/vote-man-cn@1x.jpg","linkUrl":"https://www.baidu.com/","title":"分享标题"},"success":"success","fail":""}');
+	}
+	function share3() {
+		jsbridge('{"uri":"request","method":"shareImage","data":{"body":"分享内容文本","imageUrl":"http://img.taopic.com/uploads/allimg/120727/201995-120HG1030762.jpg","linkUrl":"https://www.baidu.com/","title":"分享标题"},"success":"success","fail":""}');
+	}
+	
+	function share4() {
+		jsbridge('{"uri":"request","method":"shareImage","data":{"body":"分享内容文本","imageUrl":"https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo_top_ca79a146.png","linkUrl":"https://www.baidu.com/","title":"分享标题"},"success":"success","fail":""}');
 	}
 	
 	function shareBase64(){
