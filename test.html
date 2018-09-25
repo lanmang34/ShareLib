@@ -62,7 +62,7 @@
 	}
 
 	function share5() {
-		jsbridge('{"uri":"request","method":"shareImage","data":{"body":"分享内容文本","imageUrl":"' + document.getElementById("share5").value + '","linkUrl":"https://www.baidu.com/","title":"分享标题"},"success":"success","fail":""}');
+		jsbridge('{"uri":"request","method":"share","data":{"body":"分享内容文本","imageUrl":"' + document.getElementById("share5").value + '","linkUrl":"https://www.baidu.com/","title":"分享标题"},"success":"success","fail":""}');
 	}
 
 	function shareBase64(){
