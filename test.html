@@ -18,9 +18,21 @@
 <h2 onClick="login()">登录(js)</h2>
 <h2 onClick="spot()"> 调起币币交易(无symbol)</h2>
 <h2 onClick="spot2()"> 调起币币交易(symbol=eth_btc)</h2>
+<h2 onClick="spot2()"> 外部浏览器(symbol=eth_btc)</h2>
+<h2 onClick="spot2()"> 调起币币交易调起(symbol=eth_btc)</h2>
+<h2 onClick="native()"> 外部浏览器调起app(okex://web?url=https://www.baidu.com)</h2>
 </body>
 <script type="text/javascript">
 
+	function native() {
+		var ifr = document.createElement('iframe');
+		ifr.src = 'okex://web?:https://www.baidu.com';
+		ifr.style.display = 'none';
+		document.body.appendChild(ifr);
+		window.setTimeout(function () {
+		document.body.removeChild(ifr);
+		}, 300);
+	}
 
 	function getToken() {
 		var token = window.native.getToken();
