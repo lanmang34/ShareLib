@@ -21,12 +21,15 @@
 <h2 onClick="spot2()"> 外部浏览器(symbol=eth_btc)</h2>
 <h2 onClick="spot2()"> 调起币币交易调起(symbol=eth_btc)</h2>
 <h2 onClick="native()"> 外部浏览器调起app(okex://web?url=https://www.baidu.com)</h2>
+<h2 onClick="recharge0()"> 调起充值(无参)</h2>
 <h2 onClick="recharge1()"> 调起BTC充值(currencyId=0)</h2>
 <h2 onClick="recharge2()"> 调起USDT充值(currencyId=7)</h2>
 <h2 onClick="recharge3()"> 调起ETH充值(currencyId=2)</h2>
+<h2 onClick="withdraw0()"> 调起提币(无参)</h2>
 <h2 onClick="withdraw1()"> 调起BTC提币(currencyId=0)</h2>
 <h2 onClick="withdraw2()"> 调起USDT提币(currencyId=7)</h2>
 <h2 onClick="withdraw3()"> 调起ETH提币(currencyId=2)</h2>
+<h2 onClick="quickChange0()"> 调起兑换(无参)</h2>
 <h2 onClick="quickChange1()"> 调起兑换from=BTC(fromCurrencyId=0)</h2>
 <h2 onClick="quickChange2()"> 调起兑换to=BTC(toCurrencyId=0)</h2>
 <h2 onClick="quickChange3()"> 调起兑换from=BTC&to=USDT(fromCurrencyId=0&toCurrencyId=7)</h2>
@@ -98,6 +101,9 @@
   function spot2() {
 		jsbridge('{"uri":"window","method":"nav","data":"main/spot/buy?symbol=eth_btc"}');
 	}
+	function recharge0() {
+		jsbridge('{"uri":"window","method":"nav","data":"recharge"}');
+	}
 	 function recharge1() {
 		jsbridge('{"uri":"window","method":"nav","data":"recharge?currencyId=0"}');
 	}
@@ -107,6 +113,9 @@
 	 function recharge3() {
 		jsbridge('{"uri":"window","method":"nav","data":"recharge?currencyId=2"}');
 	}
+	 function withdraw0() {
+		jsbridge('{"uri":"window","method":"nav","data":"withdrawal"}');
+	}
 	 function withdraw1() {
 		jsbridge('{"uri":"window","method":"nav","data":"withdrawal?currencyId=0"}');
 	}
@@ -115,6 +124,9 @@
 	}
 	 function withdraw3() {
 		jsbridge('{"uri":"window","method":"nav","data":"withdrawal?currencyId=2"}');
+	}
+	 function quickChange0() {
+		jsbridge('{"uri":"window","method":"nav","data":"quick_change"}');
 	}
 	 function quickChange1() {
 		jsbridge('{"uri":"window","method":"nav","data":"quick_change?fromCurrencyId=0"}');
